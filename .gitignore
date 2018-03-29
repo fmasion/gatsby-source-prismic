@@ -2,5 +2,6 @@
 *.tgz
 /gatsby-node.js
 /fetch.js
+/gatsby-node-helper.js
 /yarn.lock
 node_modules
