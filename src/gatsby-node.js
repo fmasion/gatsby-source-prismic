@@ -1,10 +1,12 @@
-import createNodeHelpers from 'gatsby-node-helpers'
+import createNodeHelpers from './gatsby-node-helper.js'
 import pipe from 'lodash/fp/pipe'
+import partition from 'lodash/fp/partition'
+import camelcase from 'lodash/fp/camelcase'
 import fetchData from './fetch'
 
-const { createNodeFactory } = createNodeHelpers({ typePrefix: `Prismic` })
+const { createNodeFactory } = createNodeHelpers({ typePrefix: `Prismic` , conflictFieldPrefix : ``})
 
-const DocumentNode = createNodeFactory(`Document`)
+//const DocumentNode = createNodeFactory(`Document`)
 
 export const sourceNodes = async (
   { boundActionCreators: { createNode } },
@@ -12,5 +14,8 @@ export const sourceNodes = async (
 ) => {
   const { documents } = await fetchData({ repositoryName, accessToken })
 
-  documents.forEach(pipe(DocumentNode, createNode))
+  documents.forEach(v => {
+    console.log(v);
+    pipe(createNodeFactory(camelcase(v.type)), createNode)(v)  
+  })
 }
